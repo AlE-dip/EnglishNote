@@ -1,6 +1,6 @@
 package com.ale.englishnote.repository;
 
-import com.ale.englishnote.model.RelationWord;
+import com.ale.englishnote.entity.RelationWord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

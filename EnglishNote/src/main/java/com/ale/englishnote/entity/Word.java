@@ -1,24 +1,22 @@
-package com.ale.englishnote.model;
+package com.ale.englishnote.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.sql.ast.tree.expression.Collation;
-import org.springframework.context.annotation.Primary;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Word implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String english;
     private String date;
@@ -31,13 +29,9 @@ public class Word implements Serializable {
     @OneToMany(mappedBy = "word")
     private List<Mean> means;
 
-    @OneToMany
-    private ArrayList<Tag> tags;
+    @ManyToMany
+    private List<Tag> tags;
 
-    @OneToMany(mappedBy = "word")
-    private ArrayList<RelationWord> relationWords;
-
-    @OneToOne(mappedBy = "wordRelation", cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private RelationWord relationWord;
+    @ManyToMany
+    private List<RelationWord> relationWords;
 }

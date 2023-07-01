@@ -1,18 +1,10 @@
 package com.ale.englishnote.service;
 
-import com.ale.englishnote.model.Word;
-import com.ale.englishnote.repository.WordRepository;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.ale.englishnote.entity.Word;
 
 public interface WordService {
     Word findFirstWord();
 
-    void saveWords(List<Word> words);
+    void saveWords(Iterable<Word> words);
+    void saveWord(Word word);
 }

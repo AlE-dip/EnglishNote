@@ -1,4 +1,4 @@
-package com.ale.englishnote.model;
+package com.ale.englishnote.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,20 +9,22 @@ import java.util.Objects;
 @Entity
 @Data
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Mean implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
-    public String meanWord;
-    public long wordId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id = 1;
+    private String meanWord;
+
+    private long wordId;
 
     @ManyToOne
     @JoinColumn(name = "type")
-    public Type type;
+    private Type type;
 
     @ManyToOne
     @JoinColumn(name = "word")
@@ -38,6 +40,6 @@ public class Mean implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, type, meanWord, word.getId());
+        return Objects.hash(id);
     }
 }

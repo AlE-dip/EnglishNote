@@ -1,6 +1,9 @@
 package com.ale.englishnote.service;
 
-import org.springframework.stereotype.Service;
+import com.ale.englishnote.entity.Type;
+
+import java.util.List;
 
 public interface TypeService {
+    List<Type> saveTypes(Iterable<Type> types);
 }

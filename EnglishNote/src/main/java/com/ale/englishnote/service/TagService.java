@@ -1,6 +1,9 @@
 package com.ale.englishnote.service;
 
-import org.springframework.stereotype.Service;
+import com.ale.englishnote.entity.Tag;
+
+import java.util.List;
 
 public interface TagService {
+    List<Tag> saveTags(Iterable<Tag> tags);
 }

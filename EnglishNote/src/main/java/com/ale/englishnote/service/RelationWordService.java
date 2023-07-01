@@ -1,6 +1,7 @@
 package com.ale.englishnote.service;
 
-import org.springframework.stereotype.Service;
+import com.ale.englishnote.entity.RelationWord;
 
 public interface RelationWordService {
+    void saveRelationWords(Iterable<RelationWord> relationWords);
 }

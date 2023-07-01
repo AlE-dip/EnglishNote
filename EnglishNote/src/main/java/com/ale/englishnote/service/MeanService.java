@@ -1,6 +1,7 @@
 package com.ale.englishnote.service;
 
-import org.springframework.stereotype.Service;
+import com.ale.englishnote.entity.Mean;
 
 public interface MeanService {
+    void saveMeans(Iterable<Mean> means);
 }

@@ -1,9 +1,6 @@
-package com.ale.englishnote.model;
+package com.ale.englishnote.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -12,26 +9,32 @@ import java.util.Objects;
 @Entity
 @Data
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Tag implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
-    public String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return id == tag.id && Objects.equals(name, tag.name);
+        return Objects.equals(name, tag.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(name);
+    }
+
+    public Tag idZero(){
+        id = 0;
+        return this;
     }
 }
