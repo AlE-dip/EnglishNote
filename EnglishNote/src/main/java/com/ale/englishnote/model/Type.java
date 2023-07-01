@@ -1,16 +1,25 @@
 package com.ale.englishnote.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+@Entity
 @Data
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Type implements Serializable {
-    public int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public long id;
     public String name;
 
     @Override
