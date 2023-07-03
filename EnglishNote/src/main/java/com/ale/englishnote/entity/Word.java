@@ -1,5 +1,6 @@
 package com.ale.englishnote.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Data
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,10 +20,10 @@ public class Word implements Serializable {
     private String english;
     private String date;
 
-    private int notification; //0 khong dat thong bao //1 dat thong bao
-    private int auto;
-    private int game;
-    private int forget;
+    private int notification = 0; //0 don't set notification; 1 set notification; default 0
+    private int auto = 1; //0 don't set notification; 1 set notification; default 1
+    private int game = 1; //default 1
+    private int forget = 0; //default 0
 
     @OneToMany(mappedBy = "word")
     private List<Mean> means;
@@ -34,4 +33,5 @@ public class Word implements Serializable {
 
     @ManyToMany
     private List<RelationWord> relationWords;
+
 }

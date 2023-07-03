@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class MeanServiceImpl implements MeanService {
-    MeanRepository meanRepository;
+    private final MeanRepository meanRepository;
     @Override
     public void saveMeans(Iterable<Mean> means) {
         meanRepository.saveAll(means);

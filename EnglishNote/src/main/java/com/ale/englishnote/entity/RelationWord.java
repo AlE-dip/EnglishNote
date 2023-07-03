@@ -1,5 +1,6 @@
 package com.ale.englishnote.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,8 +9,6 @@ import java.util.Objects;
 
 @Entity
 @Data
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,14 +22,14 @@ public class RelationWord implements Serializable {
     private long id;
     private int relationType;
 
-//    @Column(insertable=false, updatable=false)
+    @Transient
     private long wordId;
 
     @ManyToOne
     @JoinColumn(name = "word")
     private Word word;
 
-//    @Column(insertable=false, updatable=false)
+    @Transient
     private long relationWordId;
 
     @ManyToOne

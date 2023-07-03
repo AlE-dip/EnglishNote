@@ -1,5 +1,6 @@
 package com.ale.englishnote.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,8 +9,6 @@ import java.util.Objects;
 
 @Entity
 @Data
-@Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,16 +16,17 @@ public class Mean implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id = 1;
+    private long id;
     private String meanWord;
 
+    @Transient
     private long wordId;
 
     @ManyToOne
     @JoinColumn(name = "type")
     private Type type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "word")
     private Word word;
 

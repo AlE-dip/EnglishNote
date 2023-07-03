@@ -17,11 +17,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class FileService {
 
-    WordService wordService;
-    TypeService typeService;
-    MeanService meanService;
-    TagService tagService;
-    RelationWordService relationWordService;
+    private final WordService wordService;
+    private final TypeService typeService;
+    private final MeanService meanService;
+    private final TagService tagService;
+    private final RelationWordService relationWordService;
 
 
     public void importDefault() {

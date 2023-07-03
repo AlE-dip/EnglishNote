@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class TypeServiceImpl implements TypeService {
-    TypeRepository typeRepository;
+    private final TypeRepository typeRepository;
     @Override
     public List<Type> saveTypes(Iterable<Type> types) {
         return typeRepository.saveAll(types);

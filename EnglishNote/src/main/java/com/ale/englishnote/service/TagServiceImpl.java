@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class TagServiceImpl implements TagService {
-    TagRepository tagRepository;
+    private final TagRepository tagRepository;
     @Override
     public List<Tag> saveTags(Iterable<Tag> tags) {
         return tagRepository.saveAll(tags);
