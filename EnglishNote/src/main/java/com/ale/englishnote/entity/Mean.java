@@ -26,7 +26,7 @@ public class Mean implements Serializable {
     @JoinColumn(name = "type")
     private Type type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "word")
     private Word word;
 

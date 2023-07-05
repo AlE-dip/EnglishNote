@@ -1,9 +1,10 @@
 package com.ale.englishnote.service;
 
+import com.ale.englishnote.dto.InputWordDto;
 import com.ale.englishnote.entity.Word;
-import com.ale.englishnote.model.WordModel;
+import com.ale.englishnote.dto.WordDto;
+import com.ale.englishnote.util.QueryRequest;
 
-import java.util.Arrays;
 import java.util.List;
 
 public interface WordService {
@@ -11,12 +12,11 @@ public interface WordService {
 
     List<Word> saveWords(Iterable<Word> words);
 
-    List<WordModel> insertWords(Iterable<Word> words);
     Word saveWord(Word word);
 
-    List<WordModel> findAll();
+    public List<WordDto> queryWord(QueryRequest queryRequest);
 
-    List<WordModel> findWord(String english);
+    List<WordDto> searchWord(String english, QueryRequest queryRequest);
 
-    List<WordModel> filterWord(String word);
+    WordDto insertWord(InputWordDto inputWordDto);
 }

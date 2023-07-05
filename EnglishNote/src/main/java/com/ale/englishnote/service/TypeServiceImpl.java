@@ -15,4 +15,15 @@ public class TypeServiceImpl implements TypeService {
     public List<Type> saveTypes(Iterable<Type> types) {
         return typeRepository.saveAll(types);
     }
+
+    public Type findById(long id){
+        return typeRepository.findById(id);
+    }
+
+    @Override
+    public Type findByName(String name) {
+        return typeRepository.findByName(name);
+    }
+
+
 }
