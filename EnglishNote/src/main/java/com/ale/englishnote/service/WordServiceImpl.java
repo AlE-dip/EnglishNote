@@ -1,13 +1,12 @@
 package com.ale.englishnote.service;
 
-import com.ale.englishnote.dto.InputRelationWordDto;
-import com.ale.englishnote.dto.InputWordDto;
+import com.ale.englishnote.dto.insert.InsertWord;
 import com.ale.englishnote.entity.*;
-import com.ale.englishnote.dto.WordDto;
-import com.ale.englishnote.repository.MeanRepository;
+import com.ale.englishnote.dto.view.WordDto;
 import com.ale.englishnote.repository.WordRepository;
 import com.ale.englishnote.util.*;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @AllArgsConstructor
@@ -36,7 +36,7 @@ public class WordServiceImpl implements WordService {
     }
 
     @Override
-    public Word saveWord(Word word) {
+    public Word insertWord(Word word) {
         return wordRepository.save(word);
     }
 
@@ -51,38 +51,97 @@ public class WordServiceImpl implements WordService {
     @Override
     public List<WordDto> searchWord(String english, QueryRequest queryRequest) {
         PageRequest pageRequest = UtilContent.pageRequest(queryRequest);
-        return wordRepository.findByEnglishLike("%" + english + "%", pageRequest).stream().map(WordDto::newInstance).toList();
+        return wordRepository.searchWord(english, pageRequest).stream().map(WordDto::newInstance).toList();
     }
 
     @Transactional(rollbackFor = AppException.class)
     @Override
-    public WordDto insertWord(InputWordDto inputWordDto) {
-        if (!wordRepository.findByEnglish(inputWordDto.getEnglish()).isEmpty()) {
+    public WordDto insertWord(InsertWord insertWord) {
+        if (!wordRepository.findByEnglish(insertWord.getEnglish()).isEmpty()) {
             throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.WORD_ALREADY_EXIST);
         }
-        Word word = inputWordDto.toWord();
+        Word word = insertWord.toWord();
 
-        //Check tags
-        if (inputWordDto.getTags() != null && !inputWordDto.getTags().isEmpty()) {
-            List<Tag> tags = tagService.findAllByIds(inputWordDto.getTags());
-            if (tags.size() != inputWordDto.getTags().size()) {
-                throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.ID_NOT_EXIST + Tag.class.getName());
-            }
-            word.getTags().addAll(tags);
-        }
+        addTag(insertWord, word);
 
-        //Add means
-        List<Mean> means = meanService.insertMeans(inputWordDto.getMeans(), word);
-        word.setMeans(means);
+        wordRepository.save(word);
 
-        //Add relation word
-        if (inputWordDto.getRelationWords() != null && !inputWordDto.getRelationWords().isEmpty()) {
-            List<RelationWord> relationWords = relationWordService.insertRelationWords(inputWordDto.getRelationWords(), word);
-            word.setRelationWords(relationWords);
-        }
+        addMeans(insertWord, word);
+        addRelationWords(insertWord, word);
 
         wordRepository.save(word);
 
         return WordDto.newInstance(word);
     }
+
+    @Transactional(rollbackFor = AppException.class)
+    @Override
+    public WordDto updateWord(InsertWord insertWord, Long id) {
+        AtomicReference<Word> atomicReference = new AtomicReference<>();
+        List<Word> nameWord = wordRepository.findByEnglish(insertWord.english);
+        nameWord.forEach(word -> {
+            if(word.getId() != id){
+                throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.WORD_ALREADY_EXIST);
+            }
+        });
+        wordRepository.findById(id).ifPresentOrElse(word -> {
+            //Tag
+            word.getTags().clear();
+
+            //Mean
+            meanService.deleteMeans(word.getMeans());
+            word.getMeans().clear();
+            word.getRelationWords().clear();
+            wordRepository.save(word);
+
+            List<RelationWord> relationWords = relationWordService.getRelationWordByWordId(word.getId());
+            relationWords.forEach(relationWord -> {
+                Word wordTmp = relationWord.getWord().getId() != word.getId()
+                        ? relationWord.getWord()
+                        : relationWord.getWordRelation();
+                wordTmp.getRelationWords().remove(relationWord);
+                wordRepository.save(wordTmp);
+            });
+
+            relationWordService.deleteRelationWord(relationWords);
+
+            word.setEnglish(insertWord.getEnglish());
+            addTag(insertWord, word);
+            addMeans(insertWord, word);
+            addRelationWords(insertWord, word);
+            wordRepository.save(word);
+
+            atomicReference.set(word);
+        }, () -> {
+            throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.ID_NOT_EXIST + Word.class.getName());
+        });
+        return WordDto.newInstance(atomicReference.get());
+    }
+
+    private void addTag(InsertWord insertWord, Word word) {
+        //Check tags
+        if (insertWord.getTags() != null && !insertWord.getTags().isEmpty()) {
+            List<Tag> tags = tagService.findAllByIds(insertWord.getTags());
+            if (tags.size() != insertWord.getTags().size()) {
+                throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.ID_NOT_EXIST + Tag.class.getName());
+            }
+            word.getTags().addAll(tags);
+        }
+    }
+
+    private void addMeans(InsertWord insertWord, Word word) {
+        //Add means
+        List<Mean> means = meanService.insertMeans(insertWord.getMeans(), word);
+        word.setMeans(means);
+    }
+
+    private void addRelationWords(InsertWord insertWord, Word word) {
+        //Add relation word
+        if (insertWord.getRelationWords() != null && !insertWord.getRelationWords().isEmpty()) {
+            List<RelationWord> relationWords;
+            relationWords = relationWordService.insertRelationWords(insertWord.getRelationWords(), word);
+            word.setRelationWords(relationWords);
+        }
+    }
+
 }

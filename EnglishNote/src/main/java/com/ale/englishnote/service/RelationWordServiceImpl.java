@@ -1,6 +1,6 @@
 package com.ale.englishnote.service;
 
-import com.ale.englishnote.dto.InputRelationWordDto;
+import com.ale.englishnote.dto.insert.InsertRelationWord;
 import com.ale.englishnote.entity.RelationWord;
 import com.ale.englishnote.entity.Word;
 import com.ale.englishnote.repository.RelationWordRepository;
@@ -26,9 +26,9 @@ public class RelationWordServiceImpl implements RelationWordService {
     }
 
     @Override
-    public List<RelationWord> insertRelationWords(List<InputRelationWordDto> inputRelationWordDtos, Word wordCurrent) {
-        List<Long> listId = inputRelationWordDtos.stream()
-                .map(InputRelationWordDto::getWordRelationId)
+    public List<RelationWord> insertRelationWords(List<InsertRelationWord> insertRelationWords, Word wordCurrent) {
+        List<Long> listId = insertRelationWords.stream()
+                .map(InsertRelationWord::getWordRelationId)
                 .toList();
         List<Word> wordRelation = wordRepository.findAllByIdIn(listId);
         if (listId.size() != wordRelation.size()) {
@@ -36,7 +36,7 @@ public class RelationWordServiceImpl implements RelationWordService {
         }
 
         List<RelationWord> relationWords = new ArrayList<>();
-        inputRelationWordDtos.forEach(r -> {
+        insertRelationWords.forEach(r -> {
             wordRelation.stream()
                     .filter(w -> w.getId() == r.getWordRelationId())
                     .findFirst()
@@ -44,7 +44,6 @@ public class RelationWordServiceImpl implements RelationWordService {
                         RelationWord relationWord = r.toRelationWord(wordCurrent);
                         relationWords.add(relationWord);
                         relationWord.setWordRelation(w);
-                        w.getRelationWords().clear();
                         w.getRelationWords().add(relationWord);
                     });
         });
@@ -52,4 +51,15 @@ public class RelationWordServiceImpl implements RelationWordService {
         wordRepository.saveAll(wordRelation);
         return relationWords;
     }
+
+    @Override
+    public List<RelationWord> getRelationWordByWordId(Long wordId) {
+        return relationWordRepository.getRelationWordByWordId(wordId);
+    }
+
+    @Override
+    public void deleteRelationWord(List<RelationWord> relationWords) {
+        relationWordRepository.deleteAll(relationWords);
+    }
+
 }

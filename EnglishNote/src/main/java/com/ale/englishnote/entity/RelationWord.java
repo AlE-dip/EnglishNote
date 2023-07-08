@@ -41,11 +41,11 @@ public class RelationWord implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RelationWord that = (RelationWord) o;
-        return wordId == that.wordId && relationWordId == that.relationWordId;
+        return word.getId() == that.word.getId() && wordRelation.getId() == that.wordRelation.getId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(wordId, relationWordId);
+        return Objects.hash(word.getId(), wordRelation.getId());
     }
 }

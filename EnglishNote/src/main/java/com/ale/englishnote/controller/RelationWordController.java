@@ -1,7 +1,6 @@
 package com.ale.englishnote.controller;
 
-import com.ale.englishnote.dto.RelationWordDto;
-import com.ale.englishnote.entity.RelationWord;
+import com.ale.englishnote.dto.view.RelationWordDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

@@ -6,8 +6,6 @@ import java.util.List;
 
 public interface TypeService {
     List<Type> saveTypes(Iterable<Type> types);
-
     Type findById(long id);
-
     Type findByName(String name);
 }

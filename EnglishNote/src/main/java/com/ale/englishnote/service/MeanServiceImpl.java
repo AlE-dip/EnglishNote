@@ -1,6 +1,6 @@
 package com.ale.englishnote.service;
 
-import com.ale.englishnote.dto.InputMeanDto;
+import com.ale.englishnote.dto.insert.InsertMean;
 import com.ale.englishnote.entity.Mean;
 import com.ale.englishnote.entity.Type;
 import com.ale.englishnote.entity.Word;
@@ -25,9 +25,9 @@ public class MeanServiceImpl implements MeanService {
     }
 
     @Override
-    public List<Mean> insertMeans(List<InputMeanDto> inputMeanDtos, Word word) {
+    public List<Mean> insertMeans(List<InsertMean> insertMean, Word word) {
         List<Mean> means = new ArrayList<>();
-        inputMeanDtos.forEach(inputMeanDto -> {
+        insertMean.forEach(inputMeanDto -> {
             Type type;
             if(inputMeanDto.getTypeId() != null){
                 type = typeService.findById(inputMeanDto.getTypeId());
@@ -42,5 +42,10 @@ public class MeanServiceImpl implements MeanService {
             means.add(mean);
         });
         return meanRepository.saveAll(means);
+    }
+
+    @Override
+    public void deleteMeans(List<Mean> means) {
+        meanRepository.deleteAll(means);
     }
 }

@@ -1,12 +1,14 @@
-package com.ale.englishnote.dto;
+package com.ale.englishnote.dto.view;
 
 import com.ale.englishnote.entity.RelationWord;
 import com.ale.englishnote.entity.Word;
+import com.ale.englishnote.util.AppException;
+import com.ale.englishnote.util.MessageContent;
 import com.ale.englishnote.util.RelationType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class RelationWordDto {
 
     private Long id;
-    private RelationType relationType;
+    private String relationType;
     private Long wordRelationId;
     private String wordRelation;
 
@@ -38,30 +40,36 @@ public class RelationWordDto {
         return relationWord;
     }
 
-    private RelationType stringType(int type){
+    private String stringType(int type){
         switch (type) {
+            case 0 -> {
+                return "RELATED";
+            }
             case 1 -> {
-                return RelationType.SYNONYM;
+                return "SYNONYM";
             }
             case 2 -> {
-                return RelationType.ANTONYM;
+                return "ANTONYM";
             }
             default -> {
-                return RelationType.RELATED;
+                throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.TYPE_NOT_EXIST + type);
             }
         }
     }
 
-    private int intType(RelationType type){
+    public static int intType(String type){
         switch (type) {
-            case SYNONYM -> {
+            case "RELATED" -> {
+                return 0;
+            }
+            case "SYNONYM" -> {
                 return 1;
             }
-            case ANTONYM -> {
+            case "ANTONYM" -> {
                 return 2;
             }
             default -> {
-                return 0;
+                throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.TYPE_NOT_EXIST + type);
             }
         }
     }

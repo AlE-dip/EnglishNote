@@ -42,6 +42,7 @@ public class AppExceptionHandler {
     @ExceptionHandler({ Exception.class })
     public ResponseEntity handleException(Exception e) {
         e.printStackTrace();
+        System.out.println(e.getMessage());
         return ResponseEntity.status(500).body(MessageContent.UNKNOWN_ERROR);
     }
 }

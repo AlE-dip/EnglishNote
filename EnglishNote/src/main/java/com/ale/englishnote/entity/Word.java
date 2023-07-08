@@ -31,7 +31,7 @@ public class Word implements Serializable {
     @ManyToMany
     private List<Tag> tags;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany
     private List<RelationWord> relationWords;
 
 }

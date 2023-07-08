@@ -1,19 +1,12 @@
-package com.ale.englishnote.dto;
+package com.ale.englishnote.dto.insert;
 
-import com.ale.englishnote.entity.Tag;
-import com.ale.englishnote.entity.Type;
 import com.ale.englishnote.entity.Word;
-import com.ale.englishnote.util.AppException;
-import com.ale.englishnote.util.MessageContent;
-import com.ale.englishnote.util.ValidField;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
-import org.springframework.http.HttpStatus;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,15 +16,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InputWordDto {
+public class InsertWord {
     @NotBlank(message = "english not blank")
-    private String english;
+    public String english;
     @Valid
     @NotEmpty(message = "means not empty")
-    private List<InputMeanDto> means;
-    private List<Long> tags;
+    public List<InsertMean> means;
+    public List<Long> tags;
     @Valid
-    private List<InputRelationWordDto> relationWords;
+    public List<InsertRelationWord> relationWords;
 
     public Word toWord() {
         Word word = new Word();

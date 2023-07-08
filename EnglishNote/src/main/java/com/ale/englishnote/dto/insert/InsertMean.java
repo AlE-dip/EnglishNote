@@ -1,7 +1,6 @@
-package com.ale.englishnote.dto;
+package com.ale.englishnote.dto.insert;
 
 import com.ale.englishnote.entity.Mean;
-import com.ale.englishnote.entity.Type;
 import com.ale.englishnote.entity.Word;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -11,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InputMeanDto {
+public class InsertMean {
     @NotBlank(message = "mean not blank")
-    private String meanWord;
-    private Long typeId;
+    public String meanWord;
+    public Long typeId;
 
     public Mean toMean(Word word){
         Mean mean = new Mean();

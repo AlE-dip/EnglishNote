@@ -1,10 +1,9 @@
-package com.ale.englishnote.dto;
+package com.ale.englishnote.dto.view;
 
 import com.ale.englishnote.entity.Mean;
-import com.ale.englishnote.entity.Type;
 import com.ale.englishnote.entity.Word;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MeanDto {
 
+    @NotNull
     private Long id;
+    @NotNull
     private String meanWord;
     private TypeDto type;
 

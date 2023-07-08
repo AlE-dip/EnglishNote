@@ -1,7 +1,7 @@
 package com.ale.englishnote.controller;
 
-import com.ale.englishnote.dto.InputWordDto;
-import com.ale.englishnote.dto.WordDto;
+import com.ale.englishnote.dto.insert.InsertWord;
+import com.ale.englishnote.dto.view.WordDto;
 import com.ale.englishnote.service.WordService;
 import com.ale.englishnote.util.QueryRequest;
 import jakarta.validation.Valid;
@@ -34,8 +34,14 @@ public class WordController {
     }
 
     @PostMapping
-    public ResponseEntity insertWords(@Valid @RequestBody InputWordDto inputWordDto) {
-        WordDto newWordDto = wordService.insertWord(inputWordDto);
+    public ResponseEntity insertWords(@Valid @RequestBody InsertWord insertWord) {
+        WordDto newWordDto = wordService.insertWord(insertWord);
+        return new ResponseEntity<>(newWordDto, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateWords(@Valid @RequestBody InsertWord insertWord, @PathVariable Long id) {
+        WordDto newWordDto = wordService.updateWord(insertWord, id);
         return new ResponseEntity<>(newWordDto, HttpStatus.OK);
     }
 

@@ -1,8 +1,7 @@
-package com.ale.englishnote.dto;
+package com.ale.englishnote.dto.view;
 
 import com.ale.englishnote.entity.Type;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

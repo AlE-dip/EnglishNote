@@ -92,17 +92,11 @@ public class FileService {
                 relationWord.getWord().getRelationWords().add(relationWord);
                 relationWord.getWordRelation().getRelationWords().add(relationWord);
             });
-//            wordService.saveWords(
-//                    words.stream()
-//                            .filter(word -> word.getRelationWords() != null)
-//                            .toList()
-//            );
-            words.stream()
-                    .filter(word -> word.getRelationWords() != null)
-                    .toList()
-                    .forEach(word -> {
-                              wordService.saveWord(word);
-                    });
+            wordService.saveWords(
+                    words.stream()
+                            .filter(word -> word.getRelationWords() != null)
+                            .toList()
+            );
 
             meanSet.forEach(mean -> {
                 types.stream()
