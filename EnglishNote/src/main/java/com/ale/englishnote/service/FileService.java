@@ -45,6 +45,14 @@ public class FileService {
                 tagSet.addAll(word.getTags());
 
                 if(word.getRelationWords() != null){
+                    word.getRelationWords().forEach(relationWord -> {
+                        Word wordTmp = new Word();
+                        wordTmp.setId(relationWord.getWordId());
+                        Word wordRelationTmp = new Word();
+                        wordRelationTmp.setId(relationWord.getRelationWordId());
+                        relationWord.setWord(wordTmp);
+                        relationWord.setWordRelation(wordRelationTmp);
+                    });
                     relationWordSet.addAll(word.getRelationWords());
                     word.getRelationWords().clear();
                 }

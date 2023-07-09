@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TagDto {
-    private Long id;
-    private String name;
+    public Long id;
+    public String name;
 
     public static TagDto newInstance(Tag tag) {
         TagDto tagDto = new TagDto();

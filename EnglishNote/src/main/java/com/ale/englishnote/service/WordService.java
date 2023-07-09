@@ -1,6 +1,7 @@
 package com.ale.englishnote.service;
 
 import com.ale.englishnote.dto.insert.InsertWord;
+import com.ale.englishnote.entity.Tag;
 import com.ale.englishnote.entity.Word;
 import com.ale.englishnote.dto.view.WordDto;
 import com.ale.englishnote.util.QueryRequest;
@@ -19,7 +20,7 @@ public interface WordService {
 
     Word insertWord(Word word);
 
-    public List<WordDto> queryWord(QueryRequest queryRequest);
+    List<WordDto> queryWord(QueryRequest queryRequest);
 
     List<WordDto> searchWord(String english, QueryRequest queryRequest);
 
