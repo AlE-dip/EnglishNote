@@ -26,4 +26,5 @@ public interface WordService {
 
     WordDto insertWord(InsertWord insertWord);
     WordDto updateWord(InsertWord insertWord, Long id);
+    boolean deleteWord(Long id);
 }

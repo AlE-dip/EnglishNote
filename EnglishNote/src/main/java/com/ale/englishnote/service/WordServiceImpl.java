@@ -54,7 +54,7 @@ public class WordServiceImpl implements WordService {
         return wordRepository.searchWord(english, pageRequest).stream().map(WordDto::newInstance).toList();
     }
 
-    @Transactional(rollbackFor = AppException.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public WordDto insertWord(InsertWord insertWord) {
         if (!wordRepository.findByEnglish(insertWord.getEnglish()).isEmpty()) {
@@ -74,7 +74,7 @@ public class WordServiceImpl implements WordService {
         return WordDto.newInstance(word);
     }
 
-    @Transactional(rollbackFor = AppException.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public WordDto updateWord(InsertWord insertWord, Long id) {
         AtomicReference<Word> atomicReference = new AtomicReference<>();
@@ -94,16 +94,7 @@ public class WordServiceImpl implements WordService {
             word.getRelationWords().clear();
             wordRepository.save(word);
 
-            List<RelationWord> relationWords = relationWordService.getRelationWordByWordId(word.getId());
-            relationWords.forEach(relationWord -> {
-                Word wordTmp = relationWord.getWord().getId() != word.getId()
-                        ? relationWord.getWord()
-                        : relationWord.getWordRelation();
-                wordTmp.getRelationWords().remove(relationWord);
-                wordRepository.save(wordTmp);
-            });
-
-            relationWordService.deleteRelationWord(relationWords);
+            deleteRelation(word.getId());
 
             word.setEnglish(insertWord.getEnglish());
             addTag(insertWord, word);
@@ -116,6 +107,19 @@ public class WordServiceImpl implements WordService {
             throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.ID_NOT_EXIST + Word.class.getName());
         });
         return WordDto.newInstance(atomicReference.get());
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public boolean deleteWord(Long id) {
+        wordRepository.findById(id).ifPresentOrElse(word -> {
+            meanService.deleteMeans(word.getMeans());
+            deleteRelation(word.getId());
+            wordRepository.delete(word);
+        }, () -> {
+            throw new AppException(HttpStatus.BAD_REQUEST, MessageContent.WORD_NOT_EXIST);
+        });
+        return true;
     }
 
     private void addTag(InsertWord insertWord, Word word) {
@@ -142,6 +146,19 @@ public class WordServiceImpl implements WordService {
             relationWords = relationWordService.insertRelationWords(insertWord.getRelationWords(), word);
             word.setRelationWords(relationWords);
         }
+    }
+
+    private void deleteRelation(Long wordId){
+        List<RelationWord> relationWords = relationWordService.getRelationWordByWordId(wordId);
+        relationWords.forEach(relationWord -> {
+            Word wordTmp = relationWord.getWord().getId() != wordId
+                    ? relationWord.getWord()
+                    : relationWord.getWordRelation();
+            wordTmp.getRelationWords().remove(relationWord);
+            wordRepository.save(wordTmp);
+        });
+
+        relationWordService.deleteRelationWord(relationWords);
     }
 
 }

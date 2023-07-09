@@ -3,6 +3,7 @@ package com.ale.englishnote.controller;
 import com.ale.englishnote.dto.insert.InsertWord;
 import com.ale.englishnote.dto.view.WordDto;
 import com.ale.englishnote.service.WordService;
+import com.ale.englishnote.util.MessageContent;
 import com.ale.englishnote.util.QueryRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -43,6 +44,12 @@ public class WordController {
     public ResponseEntity updateWords(@Valid @RequestBody InsertWord insertWord, @PathVariable Long id) {
         WordDto newWordDto = wordService.updateWord(insertWord, id);
         return new ResponseEntity<>(newWordDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteWords(@PathVariable Long id) {
+        wordService.deleteWord(id);
+        return new ResponseEntity<>(MessageContent.DELETED, HttpStatus.OK);
     }
 
 }

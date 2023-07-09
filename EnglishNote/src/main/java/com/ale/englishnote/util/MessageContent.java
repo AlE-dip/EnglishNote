@@ -14,4 +14,5 @@ public class MessageContent {
     public final static String TYPE_ALREADY_EXIST = "Type already existed";
     public final static String TYPE_REFERENCED = "Type referenced by Mean";
     public final static String TYPE_DOES_NOT_EXIST = "Type doesn't exist";
+    public final static String WORD_NOT_EXIST = "Word not exist: ";
 }
