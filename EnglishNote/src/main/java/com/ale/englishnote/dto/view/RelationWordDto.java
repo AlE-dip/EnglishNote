@@ -4,7 +4,6 @@ import com.ale.englishnote.entity.RelationWord;
 import com.ale.englishnote.entity.Word;
 import com.ale.englishnote.util.AppException;
 import com.ale.englishnote.util.MessageContent;
-import com.ale.englishnote.util.RelationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

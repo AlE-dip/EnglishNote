@@ -22,11 +22,14 @@ public class FileService {
     private final MeanService meanService;
     private final TagService tagService;
     private final RelationWordService relationWordService;
+    private final UserServiceImpl userService;
 
 
     public void importDefault() {
         if(wordService.findFirstWord() != null) return;
         try {
+            addDefaultUser();
+
             File file = new ClassPathResource("/static/english.json").getFile();
             ObjectMapper mapper = new ObjectMapper();
             ArrayList<Word> words = mapper.readValue(file, new TypeReference<>(){});
@@ -118,6 +121,11 @@ public class FileService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void addDefaultUser() {
+        User user = new User(0L, "admin", "admin");
+        userService.save(user);
     }
 
 }
